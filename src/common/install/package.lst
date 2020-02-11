@@ -4,16 +4,13 @@ make
 libcurl4-gnutls-dev
 c-icap
 libicapapi-dev
-##JDK
-openjdk-8-jre-headless
 #Security related
 clamav
 clamav-daemon
-clamtk
 #ufw
 #acl
 #Disabled squid-deb-proxy
-squid
+#squid
 sudo
 ##Common
 #dirmngr
@@ -24,6 +21,7 @@ nano
 nmap
 #parallel
 wget
+curl
 locales
 bzip2
 locate
@@ -40,7 +38,6 @@ inotify-tools
 #gradle
 #maven
 telnet
-curl
 #used for websockify/novnc
 python-numpy
 ##Source control
@@ -49,8 +46,6 @@ python-numpy
 git
 #cvs
 ##Browser
-#epiphany-browser
-#firefox
 #Chrome
 chromium-browser
 chromium-browser-l10n

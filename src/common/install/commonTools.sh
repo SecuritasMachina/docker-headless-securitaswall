@@ -14,11 +14,11 @@ add-apt-repository \
 retry apt-get update
 echo 'Installing Squid w/ SSL'
 cd /tmp
-retry wget -q https://updates.securitasmachina.com/distrib/squid_4.6-1+deb10u1_amd64.deb
-retry wget -q https://updates.securitasmachina.com/distrib/squid-cgi_4.6-1+deb10u1_amd64.deb
-retry wget -q https://updates.securitasmachina.com/distrib/squid-common_4.6-1+deb10u1_all.deb
-retry wget -q https://updates.securitasmachina.com/distrib/squid-purge_4.6-1+deb10u1_amd64.deb
-retry wget -q https://updates.securitasmachina.com/distrib/squidclient_4.6-1+deb10u1_amd64.deb
+retry wget -q https://github.com/SecuritasMachina/SecureWall_Secure_Router/blob/master/debs/squid_4.6-1+deb10u1_amd64.deb
+retry wget -q https://github.com/SecuritasMachina/SecureWall_Secure_Router/blob/master/debs/squid-cgi_4.6-1+deb10u1_amd64.deb
+retry wget -q https://github.com/SecuritasMachina/SecureWall_Secure_Router/blob/master/debs/squid-common_4.6-1+deb10u1_all.deb
+retry wget -q https://github.com/SecuritasMachina/SecureWall_Secure_Router/blob/master/debs/squid-purge_4.6-1+deb10u1_amd64.deb
+retry wget -q https://github.com/SecuritasMachina/SecureWall_Secure_Router/blob/master/debs/squidclient_4.6-1+deb10u1_amd64.deb
 
 apt -o Dpkg::Options::="--force-confnew" install ./*.deb -y
 
