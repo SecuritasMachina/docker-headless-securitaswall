@@ -6,7 +6,7 @@ MAINTAINER Acknowledged Development Inc. "help@ackdev.com"
 
 LABEL io.k8s.description="Headless VNC Container with xfce window manager, OpenJDK 8, Eclipse, Tomcat, MySQL, MySQL Workbench, Firefox" \
       io.k8s.display-name="Headless Enterprise Developer VNC Container based on xfce" \
-      io.openshift.expose-services="6901:http,5901:xvnc" \
+      io.openshift.expose-services="80:http,443:https, 22022:ssh" \
       io.openshift.tags="vnc, xfce" \
       io.openshift.non-scalable=true
 
