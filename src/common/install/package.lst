@@ -71,3 +71,4 @@ iputils-ping
 rsync
 #desktop-file-utils
 mime-support
+libtool-bin

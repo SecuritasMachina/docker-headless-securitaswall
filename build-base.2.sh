@@ -1,4 +1,3 @@
-current_timestamp=$(date +%Y-%m-%d_%H.%M.%S)
 log_dir="$HOME/logs/docker/base-devtools/$current_timestamp"
 
 mkdir -p $log_dir

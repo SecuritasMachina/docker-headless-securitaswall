@@ -1,4 +1,3 @@
-current_timestamp=$(date +%Y-%m-%d_%H.%M)
 log_dir="$HOME/logs/docker/$current_timestamp"
 mkdir -p $log_dir
 echo "Build logs at $log_dir" 
