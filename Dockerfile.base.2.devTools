@@ -16,8 +16,4 @@ ADD src/template/homeDir/.node $HOME/.node
 ###Set Home dir Permissions
 RUN $INST_SCRIPTS/applyHomePermissions.sh
 
-#RUN $INST_SCRIPTS/developerTools_Tomcatv8.x.sh 
 
-# $INST_SCRIPTS/developerTools_Eclipse.sh &&\
-# &&\
-#	$INST_SCRIPTS/developerTools_MySQLv8.x.sh
