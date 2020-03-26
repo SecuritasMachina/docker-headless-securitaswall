@@ -1,5 +1,5 @@
 # Headless Secure Ubuntu base Container
-FROM ubuntu:18.04
+FROM debian
 LABEL maintainer="Acknowledged Development Inc. help@ackdev.com"
 MAINTAINER Acknowledged Development Inc. "help@ackdev.com"
 
@@ -32,10 +32,12 @@ ENV MYSQL_FLAVOR $MYSQL_FLAVOR
 ENV CONTAINER_USER $CONTAINER_USER
 ENV CONTAINER_DIR_NAME $CONTAINER_DIR_NAME
 ENV ECLIPSE_FLAVOR $ECLIPSE_FLAVOR
-
+ENV LANGUAGE en_US.en
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 # Define working directory.
 WORKDIR /home/${CONTAINER_USER}
-
+ARG DEBIAN_FRONTEND=noninteractive
 ## Connection ports for controlling the UI:
 # VNC port:5901
 # noVNC webport, connect via http://IP:6901/?password=vncpassword
