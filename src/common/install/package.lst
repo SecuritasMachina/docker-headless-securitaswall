@@ -12,15 +12,12 @@ clamav-daemon
 clamtk
 #ufw
 #acl
-#Disabled squid-deb-proxy
-#squid
 sudo
 ##Common
 #dirmngr
 vim
 unzip
 nano
-#squid
 nmap
 #parallel
 wget

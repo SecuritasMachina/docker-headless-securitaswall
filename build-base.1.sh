@@ -1,4 +1,4 @@
-export current_timestamp=$(date +%Y-%m-%d_%H.%M.%S)
+
 log_dir="$HOME/logs/docker/base-1/$current_timestamp"
 mkdir -p $log_dir
 

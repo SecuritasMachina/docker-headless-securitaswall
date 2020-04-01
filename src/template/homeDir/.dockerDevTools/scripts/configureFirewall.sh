@@ -10,4 +10,4 @@ ufw allow out 53
 ufw allow out 3128
 ufw enable
 
-service squid-deb-proxy start
+#service squid-deb-proxy start

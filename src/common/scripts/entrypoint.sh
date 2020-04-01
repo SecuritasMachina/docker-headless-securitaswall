@@ -47,24 +47,29 @@ PATH=/usr/sbin:$PATH
 echo 'Start Virus Scan'
 service c-icap start
 echo 'Start Proxy'
-service squid start
+#service squid start
+chmod a+rw /usr/local/squid/var/logs
+/usr/local/squid/sbin/squid -f /etc/squid/squid.conf -z
+/usr/local/squid/libexec/security_file_certgen -c -s /var/ssl_db -M 4MB
+/usr/local/squid/sbin/squid -f /etc/squid/squid.conf
+process_id=$!
 echo 'Start Web Admin'
-service tomcat start
-rsync -a $HOME/* /home/$CONTAINER_DIR_NAME/
-rsync -a $HOME/.[^.]* /home/$CONTAINER_DIR_NAME/
+#service tomcat start
+#rsync -a $HOME/* /home/$CONTAINER_DIR_NAME/
+#rsync -a $HOME/.[^.]* /home/$CONTAINER_DIR_NAME/
 
-rm -rf $HOME
-ln -s /home/$CONTAINER_DIR_NAME $HOME
+#rm -rf $HOME
+#ln -s /home/$CONTAINER_DIR_NAME $HOME
 cd $HOME
 
 updatedb
 
-echo "Clearing firefox cache, cookies, files etc in :"
-sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "entries"`; do echo "$f"; done'
-sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "entries"`; do rm -f "$f/*"; done'
-sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "Blobs"`; do echo "$f"; done'
-sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "Blobs"`; do rm -f "$f/*"; done'
+#echo "Clearing firefox cache, cookies, files etc in :"
+#sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "entries"`; do echo "$f"; done'
+#sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "entries"`; do rm -f "$f/*"; done'
+#sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "Blobs"`; do echo "$f"; done'
+#sudo -E /bin/bash -c 'for f in `find $HOME/.cache -type d -name "Blobs"`; do rm -f "$f/*"; done'
 
-su ${CONTAINER_USER} -c "bash /dockerstartup/entrypoint2.sh"
-
+#su ${CONTAINER_USER} -c "bash /dockerstartup/entrypoint2.sh"
+while true; do sleep 1000; done
 
