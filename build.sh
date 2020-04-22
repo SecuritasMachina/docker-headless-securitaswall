@@ -25,9 +25,9 @@ docker build -t ackdev/secure_proxy_securitas-wall:$current_timestamp . 2>&1 | t
 	dgoss run --cap-add=NET_ADMIN -it -v ~/DockerVolumes/developer-desktop:/home/hostVolume ackdev/secure_proxy_securitas-wall:$current_timestamp >$log_dir/dgoss.out
 	cat $log_dir/dgoss.out
 	echo "If no virus and unit tests pass push via:"
-	echo "docker push ackdev/secure_proxy_securitas-wall-base-1:2020-02-11-r1;docker push ackdev/secure_proxy_securitas-wall-base-devtools:2020-02-11-r1;docker push ackdev/secure_proxy_securitas-wall-base-xfce:2020-02-11-r1;docker push ackdev/secure_proxy_securitas-wall:$current_timestamp"
+	echo "docker push ackdev/secure_proxy_securitas-wall-base-1:2020-04-22-r1;docker push ackdev/secure_proxy_securitas-wall-base-devtools:2020-04-22-r1;docker push ackdev/secure_proxy_securitas-wall-base-xfce:2020-04-22-r1;docker push ackdev/secure_proxy_securitas-wall:$current_timestamp"
 #	echo ""
-#	echo "docker push ackdev/secure_proxy_securitas-wall-base-xfce:2020-02-11-r1"
+#	echo "docker push ackdev/secure_proxy_securitas-wall-base-xfce:2020-04-22-r1"
 #	echo "docker push ackdev/secure_proxy_securitas-wall:$current_timestamp"
 #fi
 

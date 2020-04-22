@@ -18,3 +18,13 @@
 
 * Create a release on [github.com/ConSol/docker-headless-vnc-container/releases/new](https://github.com/ConSol/docker-headless-vnc-container/releases/new)
 * Write a blog post for [labs.consol.de](https://labs.consol.de/)
+25c17827ecc6
+docker run --cap-add=NET_ADMIN -it -e VNC_RESOLUTION=1800x900 \
+	 -v $volume_path:/home/hostVolume \
+	ackdev/secure_proxy_securitas-wall:2020-04-16_11.46.52
+	
+	#fresh
+	 docker run -it --entrypoint /bin/bash  7722da71b79d
+
+	 #Running container:
+	 docker exec -it 25c17827ecc6 /bin/bash

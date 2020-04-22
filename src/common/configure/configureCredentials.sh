@@ -20,3 +20,8 @@ echo "Created ${CONTAINER_USER} SUDO password: $USER_PASSWORD"
 usermod -a -G clamav ${CONTAINER_USER}
 usermod -a -G adm ${CONTAINER_USER}
 
+#Add to ssh
+mkdir -p /etc/ssh
+touch /etc/ssh/sshd_config
+echo "AllowUsers ${CONTAINER_USER}" > /etc/ssh/sshd_config
+

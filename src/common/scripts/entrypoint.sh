@@ -48,6 +48,7 @@ echo 'Start Virus Scan'
 service c-icap start
 echo 'Start Proxy'
 #service squid start
+cp -R /usr/local/squid/libexec/security_file_certgen /usr/lib/squid
 chmod a+rw /usr/local/squid/var/logs
 /usr/local/squid/sbin/squid -f /etc/squid/squid.conf -z
 /usr/local/squid/libexec/security_file_certgen -c -s /var/ssl_db -M 4MB
