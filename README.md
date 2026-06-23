@@ -1,162 +1,164 @@
-Docker container image for Headless Java Developer using VNC session
+# SecuritasWall — Headless Secure Developer Desktop
 
-This repository contains a collection of Docker images with headless VNC environments.
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420?logo=ubuntu&logoColor=white)](https://releases.ubuntu.com/24.04/)
+[![OpenJDK](https://img.shields.io/badge/OpenJDK-21_LTS-007396?logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![Tomcat](https://img.shields.io/badge/Tomcat-10.1-F8DC75?logo=apachetomcat&logoColor=black)](https://tomcat.apache.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.4_LTS-4479A1?logo=mysql&logoColor=white)](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/)
+[![Docker](https://img.shields.io/badge/Docker-image-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![noVNC](https://img.shields.io/badge/noVNC-1.5-2D9CDB)](https://novnc.com/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
-[Hosting and usage tips](https://github.com/ackdev/docker-headless-developer-java-vnc/wiki) | [Releases](https://github.com/ackdev/docker-headless-developer-java-vnc/releases)
+A hardened, **headless** Linux developer desktop you run in a browser. It bundles a full Java
+toolchain inside an [xfce](https://xfce.org/) VNC session, and forces **all outbound traffic
+through an on-box filtering proxy that virus-scans and allow-lists egress** — so a compromised
+dependency or a malicious site has nowhere to phone home to.
 
-Each Docker image is installed with the following components:
+> Part of the [Securitas Machina](https://www.securitasmachina.org) secure-by-default tooling family.
 
-* Desktop environment [**xfce** Coming soon **Gnome**]
+![SecuritasWall desktop](docs/images/desktop-screenshot.svg)
 
-* OpenJDK 8.0
-* MySQL 8.0.15
-* Tomcat 8.5.40
-* NPM 3.5.x 
-* ClamAV
-* VNC-Server (default VNC port `5901`)
-* [**noVNC**](https://github.com/novnc/noVNC) - HTML5 VNC client (default http port `6901`)
-* Browsers:
-  * Mozilla Firefox
-  * Chromium
+> The image above is an illustrative mock. Replace `docs/images/desktop-screenshot.png` with a
+> real noVNC capture once you have built and launched the container.
+
+---
 
 ## Why?
-* [26% of firms suffered breaches in 2018 due to vulnerable open source components](https://www.scmagazineuk.com/26-firms-suffered-breaches-2018-due-vulnerable-open-source-components/article/1577856)
-* [Open source software breaches surge in the past 12 months](https://www.zdnet.com/article/open-source-software-breaches-surge-in-the-past-12-months/)
-* [Open source breaches up by 71 percent](https://betanews.com/2019/03/04/open-source-breaches-up/)
-* [Secure open source components to bypass breaches](https://searchsoftwarequality.techtarget.com/tip/Secure-open-source-components-to-bypass-breaches)
-* [More...](https://www.google.com/search?q=open+source+breaches)
 
+Modern breaches increasingly enter through the developer's machine and the open-source supply
+chain — a vulnerable transitive dependency, a typo-squatted package, or a drive-by on a
+compromised site. SecuritasWall shrinks that blast radius by giving each developer a disposable,
+network-restricted desktop:
 
-## Security Precautions
-   
-### Image Build
-* Major & Minor .x releases are built, scanned for viruses and pushed from Google Compute VM  which is only spun up for build and push, then shutdown for minimal exposure
-* All packages are checked for updates
-* Tomcat, MySQL and Eclipse signatures are checked against vendor public key and file hash
+* Browsers and build tools **cannot** reach the internet directly — only through the on-box
+  Squid + c-icap proxy, which filters and AV-scans the stream.
+* Downloads, the Maven `.m2` cache and the Gradle `.gradle` cache are scanned by **ClamAV**.
+* The container runs as an unprivileged user; only the persisted home volume survives a restart.
 
-### Runtime 
-* Restricted developer rights, sudo password in only available in build log 
-* Active virus, malware & bytecode directory scanning using ClamAV: ~/Downloads, Maven's .m2 and Gradle's .gradle
-* Daily ClamAV database updates
-* Must use a proxy, here's a [whitelist](https://github.com/ackdev/docker-headless-developer-java-vnc/blob/master/src/sample/20-whitelist) which can be used as a starting point.
+## Architecture
 
-### Persistance
-* User's home directory is persisted  
+![Architecture](docs/images/architecture.svg)
 
-## Usage
-Usage is **similar** for all provided images, e.g. for `ackdev/docker-headless-developer-java-vnc`:
+| Layer | Component |
+| --- | --- |
+| Base OS | **Ubuntu 24.04 LTS** (`unattended-upgrades`, UTF-8 locale, `nss-wrapper`) |
+| Runtime | **OpenJDK 21 (LTS)** |
+| App server | **Apache Tomcat 10.1** |
+| Database | **MySQL 8.4 (LTS)** |
+| IDE | **Eclipse 2024-09** |
+| Build | **Gradle 8.10** |
+| Desktop | xfce4 via **TigerVNC** + **noVNC 1.5** (HTML5 client) |
+| Browsers | Firefox, Chromium |
+| Security | ClamAV (daily `freshclam`), Squid forced-egress proxy, c-icap ICAP AV, restricted sudo, non-root `superstar` (uid 1500) |
 
+Default ports: **`5901`** (VNC) and **`6901`** (noVNC / HTML5 over HTTP).
+
+## Build
+
+The image is assembled in four stages — each builds `FROM` the previous tagged image:
+
+![Build pipeline](docs/images/build-flow.svg)
+
+```bash
+git clone https://github.com/SecuritasMachina/docker-headless-securitaswall
+cd docker-headless-securitaswall
+
+# Build every stage in order (base.1 → base.2 → base.3 → final)
+./buildAll.sh
 ```
-proxy="http://$proxy_ip:$proxy_port"
-docker run --cap-add=NET_ADMIN -it -e VNC_RESOLUTION=1800x900 -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/DockerVolume:/home/superstar/hostVolume ackdev/secure_java_developer_desktop:latest
+
+The optional developer-tool archives (Tomcat, MySQL, Eclipse) are downloaded into
+`src/template/homeDir/.dockerDevTools/archives/` and unpacked at runtime by the scripts in
+`src/template/homeDir/.dockerDevTools/scripts/`. The pinned versions live as `ARG`s at the top of
+`Dockerfile.base.1`.
+
+> **Behind a corporate proxy?** Uncomment and set `proxy="http://$proxy_ip:$proxy_port"` in
+> `build-base.*.sh`; the build args are wired through automatically.
+
+## Run
+
+```bash
+docker run -d \
+  -p 5901:5901 -p 6901:6901 \
+  --cap-add=NET_ADMIN \
+  -v ~/DockerVolume:/home/hostVolume \
+  ackdev/secure_proxy_securitas-wall:latest
 ```
 
-- Print out help page:
+Then connect with either:
 
-      docker run ackdev/docker-headless-developer-java-vnc:latest --help
+* **noVNC (HTML5, no client needed):** <http://localhost:6901/vnc.html> — the password is printed
+  in the container's run log.
+* **A VNC viewer:** `localhost:5901`.
 
-- Run command with mapping to local port `5901` (vnc protocol) and `6901` (vnc web access):
+Print the built-in help:
 
-      docker run -d -p 5901:5901 -p 6901:6901 -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc:latest
-  
-- Change the default user and group within a container to your own with adding `--user $(id -u):$(id -g)`:
+```bash
+docker run ackdev/secure_proxy_securitas-wall:latest --help
+```
 
-      docker run -d -p 5901:5901 -p 6901:6901 --user $(id -u):$(id -g) -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc:latest
+### Environment variables
 
-- If you want to get into the container use interactive mode `-it` and `bash`
-      
-      docker run -it -p 5901:5901 -p 6901:6901 -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc:latest bash
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `VNC_RESOLUTION` | `1280x1024` | Desktop resolution |
+| `VNC_COL_DEPTH` | `24` | Colour depth |
+| `VNC_VIEW_ONLY` | `false` | If `true`, the VNC connection is view-only (control password kept private) |
 
-- Build an image from scratch:
-      git clone https://github.com/ackdev/docker-headless-developer-java-vnc
-      cd docker-headless-developer-java-vnc  
-      docker build .  
+```bash
+docker run -d -p 5901:5901 -p 6901:6901 -e VNC_RESOLUTION=1800x900 \
+  -v ~/DockerVolume:/home/hostVolume ackdev/secure_proxy_securitas-wall:latest
+```
 
-# Connect & Control
-If the container is started like mentioned above, connect via one of these options:
+## Security model
 
-* connect via __VNC viewer `localhost:5901`__, check run output for randomly generated password
-* connect via __noVNC HTML5 full client__: [`http://localhost:6901/vnc.html`](http://localhost:6901/vnc.html), check run output for randomly generated password 
-* connect via __noVNC HTML5 lite client__: [`http://localhost:6901/?password=??????`](http://localhost:6901/?password=?????) 
-
+| Control | Detail |
+| --- | --- |
+| Forced egress | Browsers/tools must use the on-box Squid proxy; outbound is allow-listed (see [`src/sample/20-whitelist`](src/sample/20-whitelist)) |
+| Stream scanning | c-icap (ICAP) virus-scans proxied traffic |
+| At-rest scanning | ClamAV watches `~/Downloads`, `~/.m2`, `~/.gradle`; signatures refreshed daily |
+| Least privilege | Runs as `superstar` (uid 1500); the sudo password only ever appears in the build log |
+| Disposable | Only `/home/hostVolume` is persisted; everything else is reset on recreate |
 
 ## Hints
 
-### 1) Extend a Image with your own software
-Since version `1.0.0` all images run as non-root user per default, so if you want to extend the image and install software, you have to switch back to the `root` user:
+### Extend the image with your own software
 
-```bash
-## Custom Dockerfile
-FROM ackdev/docker-headless-developer-java-vnc
-ENV REFRESHED_AT 2019-03-18
-
-# Switch to root user to install additional software
+```dockerfile
+FROM ackdev/secure_proxy_securitas-wall:latest
 USER 0
-
-## Install a gedit
-RUN yum install -y gedit \
-    && yum clean all
-
-## switch back to default user
+RUN apt-get update && apt-get install -y gedit && apt-get clean
 USER 1500
 ```
 
-### 2) Change User of running Container
+### Run as your host user/group
 
-Per default, since version `1.0.0` all container processes will be executed with user id `1500`. You can change the user id as follows: 
+```bash
+docker run -it -p 6901:6901 --user $(id -u):$(id -g) \
+  -v ~/DockerVolume:/home/hostVolume ackdev/secure_proxy_securitas-wall:latest
+```
 
-#### 2.1) Using root (user id `0`)
-Add the `--user` flag to your docker run command:
+### Chromium crashes at high resolution
 
-    docker run -it --user 0 -p 6911:6901 -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc
+Chromium can run out of shared memory at large resolutions. Give it more `/dev/shm`:
 
-#### 2.2) Using user and group id of host system
-Add the `--user` flag to your docker run command:
+```bash
+docker run --shm-size=256m -p 6901:6901 -e VNC_RESOLUTION=1920x1080 \
+  -v ~/DockerVolume:/home/hostVolume ackdev/secure_proxy_securitas-wall:latest
+```
 
-    docker run -it -p 6911:6901 --user $(id -u):$(id -g) -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc
+## Releasing
 
-### 3) Override VNC environment variables
-The following VNC environment variables can be overwritten at the `docker run` phase to customize your desktop environment inside the container:
-* `VNC_COL_DEPTH`, default: `24`
-* `VNC_RESOLUTION`, default: `1280x1024`
+See [`how-to-release.md`](how-to-release.md). In short: bump the version pins, run `./buildAll.sh`,
+let the build virus-scan and `goss`-test the image, then push the four tagged images.
 
-#### 3.1) Example: Override the VNC resolution
-Simply overwrite the value of the environment variable `VNC_RESOLUTION`. For example in
-the docker run command:
+## Contact & support
 
-    docker run -it -p 5901:5901 -p 6901:6901 -e VNC_RESOLUTION=800x600 -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc
-    
-### 4) View only VNC
-Since version `1.0.0` it's possible to prevent unwanted control via VNC. Therefore you can set the environment variable `VNC_VIEW_ONLY=true`. If set, the startup script will create a random password for the control connection and use the value of `VNC_PW` for view only connection over the VNC connection.
+Questions, professional support or a vulnerability report:
+**[help@ackdev.com](mailto:help@ackdev.com)** or open an
+[issue](https://github.com/SecuritasMachina/docker-headless-securitaswall/issues/new).
 
-     docker run -it -p 5901:5901 -p 6901:6901 -e VNC_VIEW_ONLY=true -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc
-
-### 5) Known Issues
-
-#### 5.1) Chromium crashes with high VNC_RESOLUTION ([#53](https://github.com/ConSol/docker-headless-vnc-container/issues/53))
-If you open some graphic/work intensive websites in the Docker container (especially with high resolutions e.g. `1920x1080`) it can happen that Chromium crashes without any specific reason. The problem there is the too small `/dev/shm` size in the container. Currently there is no other way, as define this size on startup via `--shm-size` option, see [#53 - Solution](https://github.com/ConSol/docker-headless-vnc-container/issues/53#issuecomment-347265977):
-
-    docker run --shm-size=256m -it -p 6901:6901 -e VNC_RESOLUTION=1920x1080 -e HTTP_PROXY="$proxy" -e HTTPS_PROXY="$proxy" -e http_proxy="$proxy" -e https_proxy="$proxy" -v ~/containerdatavolume:/home/superstar/hostVolume ackdev/docker-headless-developer-java-vnc chromium-browser http://map.norsecorp.com/
-  
-
-## Release History
-
-The current change log is provided here: **[Releases](https://github.com/ackdev/docker-headless-developer-java-vnc/releases)**
-
-## Contact
-For questions, professional support or maybe some hints, feel free to contact us via **[help@ackdev.com](mailto:help@ackdev.com)** or open an [issue](https://github.com/ConSol/docker-headless-vnc-container/issues/new).  
-
-For consulting and maintenance agreements, we accept the following forms of payment:  
-* BTC: qr70z6l6fhryhv952gs0klsx5mh3trw9e5t9rgrala
-* ETH: 0x067bAf8A0468b3Fa32088B8A536e58622BC3BB2C
-* LTC: MN3vyozGhMeyjGTA9pZJ1NX8JHXwNrpWXf 
-* Credit card at [Acknowledged Development Inc.](https://ackdev.com)
-
-## Bux for Bugs
-
-Found a vulnerability?  Let us know and we'll send a reward for your time
+Found a vulnerability? Let us know — responsible disclosures are rewarded.
 
 ## License
-Apache License 2.0
 
-# docker-headless-securitaswall
+[Apache License 2.0](./LICENSE).

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16314a"/>
+      <stop offset="1" stop-color="#0c1a2a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- browser chrome -->
+  <rect width="960" height="600" fill="#0d1622"/>
+  <rect x="0" y="0" width="960" height="40" fill="#1b2838"/>
+  <circle cx="22" cy="20" r="6" fill="#ff5f57"/>
+  <circle cx="44" cy="20" r="6" fill="#febc2e"/>
+  <circle cx="66" cy="20" r="6" fill="#28c840"/>
+  <rect x="96" y="10" width="560" height="20" rx="10" fill="#0d1622"/>
+  <text x="112" y="25" fill="#7f97ad" font-size="12">http://localhost:6901/vnc.html  —  SecuritasWall headless desktop</text>
+
+  <!-- desktop wallpaper -->
+  <rect x="0" y="40" width="960" height="528" fill="url(#wall)"/>
+
+  <!-- centered watermark -->
+  <g opacity="0.92" text-anchor="middle">
+    <rect x="330" y="150" width="300" height="120" rx="14" fill="#0f2336" stroke="#2f4763"/>
+    <path d="M480 168 l44 18 v34 c0 30 -22 50 -44 60 c-22 -10 -44 -30 -44 -60 v-34 z" fill="#1d3a55" stroke="#4fb0c6" stroke-width="2"/>
+    <path d="M464 210 l12 12 l22 -24" fill="none" stroke="#5fd0a0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="480" y="300" fill="#e8eef5" font-size="22" font-weight="700">SecuritasWall</text>
+    <text x="480" y="326" fill="#8aa0b6" font-size="13">Secure headless developer desktop</text>
+  </g>
+
+  <!-- desktop icons -->
+  <g text-anchor="middle">
+    <rect x="50" y="80" width="56" height="56" rx="10" fill="#1b2c40" stroke="#2f4763"/>
+    <text x="78" y="114" font-size="22">🦊</text>
+    <text x="78" y="152" fill="#c4d2e0" font-size="11">Firefox</text>
+
+    <rect x="50" y="180" width="56" height="56" rx="10" fill="#1b2c40" stroke="#2f4763"/>
+    <text x="78" y="214" font-size="22">🌐</text>
+    <text x="78" y="252" fill="#c4d2e0" font-size="11">Chromium</text>
+
+    <rect x="50" y="280" width="56" height="56" rx="10" fill="#1b2c40" stroke="#2f4763"/>
+    <text x="78" y="314" font-size="22">🧰</text>
+    <text x="78" y="352" fill="#c4d2e0" font-size="11">Eclipse</text>
+  </g>
+
+  <!-- mock terminal -->
+  <g>
+    <rect x="600" y="360" width="320" height="170" rx="8" fill="#0a121d" stroke="#2f4763"/>
+    <rect x="600" y="360" width="320" height="22" rx="8" fill="#1b2838"/>
+    <text x="614" y="376" fill="#7f97ad" font-size="11">superstar@securitaswall: ~</text>
+    <g font-family="'DejaVu Sans Mono',monospace" font-size="11">
+      <text x="612" y="404" fill="#5fd0a0">superstar@wall:~$ java -version</text>
+      <text x="612" y="422" fill="#c4d2e0">openjdk version "21.0.5" 2024-10-15 LTS</text>
+      <text x="612" y="444" fill="#5fd0a0">superstar@wall:~$ clamscan --version</text>
+      <text x="612" y="462" fill="#c4d2e0">ClamAV 1.x/daily — db updated</text>
+      <text x="612" y="484" fill="#5fd0a0">superstar@wall:~$ curl example.com</text>
+      <text x="612" y="502" fill="#e7a6cf">via squid proxy · scanned · allowed</text>
+      <text x="612" y="520" fill="#5fd0a0">superstar@wall:~$ <tspan fill="#e8eef5">█</tspan></text>
+    </g>
+  </g>
+
+  <!-- xfce panel -->
+  <rect x="0" y="568" width="960" height="32" fill="#11202f"/>
+  <text x="16" y="589" fill="#c4d2e0" font-size="12">Applications</text>
+  <rect x="120" y="574" width="20" height="20" rx="4" fill="#1b2c40"/>
+  <rect x="148" y="574" width="20" height="20" rx="4" fill="#1b2c40"/>
+  <text x="900" y="589" fill="#8aa0b6" font-size="12">🔒 secured</text>
+
+  <!-- placeholder banner -->
+  <rect x="0" y="40" width="960" height="22" fill="#22364d"/>
+  <text x="480" y="56" fill="#9fb4ca" font-size="12" text-anchor="middle">Illustrative mock — replace docs/images/desktop-screenshot.png with a real noVNC capture when available</text>
+</svg>

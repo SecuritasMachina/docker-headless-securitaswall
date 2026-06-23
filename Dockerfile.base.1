@@ -1,20 +1,23 @@
 # Headless Secure Ubuntu base Container
-FROM ubuntu:18.04
-LABEL maintainer="Acknowledged Development Inc. help@ackdev.com"
-MAINTAINER Acknowledged Development Inc. "help@ackdev.com"
+FROM ubuntu:24.04
+LABEL maintainer="Securitas Machina (Acknowledged Development Inc.) help@ackdev.com"
 
-LABEL io.k8s.description="Headless VNC Container with xfce window manager, OpenJDK 8, Eclipse, Tomcat, MySQL, MySQL Workbench, Firefox" \
+LABEL org.opencontainers.image.title="SecuritasWall Headless Developer VNC Container" \
+      org.opencontainers.image.description="Headless VNC Container with xfce window manager, OpenJDK 21, Eclipse, Tomcat 10.1, MySQL 8.4, Firefox" \
+      org.opencontainers.image.source="https://github.com/SecuritasMachina/docker-headless-securitaswall" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      io.k8s.description="Headless VNC Container with xfce window manager, OpenJDK 21, Eclipse, Tomcat 10.1, MySQL 8.4, Firefox" \
       io.k8s.display-name="Headless Enterprise Developer VNC Container based on xfce" \
       io.openshift.expose-services="6901:http,5901:xvnc" \
       io.openshift.tags="vnc, xfce" \
       io.openshift.non-scalable=true
 
 ###Command line arguments
-#Developer tools:
-ARG TOMCAT_FLAVOR=apache-tomcat-8.5.40
-ARG MYSQL_FLAVOR=mysql-8.0.15
-ARG ECLIPSE_FLAVOR=eclipse-jee-2019-03-R-linux-gtk-x86_64
-ARG GRADLE_FLAVOR=gradle-5.0
+#Developer tools (download these archives into src/template/homeDir/.dockerDevTools/archives/):
+ARG TOMCAT_FLAVOR=apache-tomcat-10.1.34
+ARG MYSQL_FLAVOR=mysql-8.4.4
+ARG ECLIPSE_FLAVOR=eclipse-jee-2024-09-R-linux-gtk-x86_64
+ARG GRADLE_FLAVOR=gradle-8.10
 ARG USER_PASSWORD=RANDOM_USER_PASSWORD
 #User to create in container
 ARG CONTAINER_USER=superstar
@@ -23,15 +26,15 @@ ARG CONTAINER_USER=superstar
 #Note, do not include $HOME, it will be prepended in client container setup scripts
 ARG CONTAINER_DIR_NAME=hostVolume
 
-ENV USER_PASSWORD $USER_PASSWORD
+ENV USER_PASSWORD=$USER_PASSWORD
 
-ENV HOME /home/${CONTAINER_USER}
-ENV GRADLE_FLAVOR $GRADLE_FLAVOR
-ENV TOMCAT_FLAVOR $TOMCAT_FLAVOR
-ENV MYSQL_FLAVOR $MYSQL_FLAVOR
-ENV CONTAINER_USER $CONTAINER_USER
-ENV CONTAINER_DIR_NAME $CONTAINER_DIR_NAME
-ENV ECLIPSE_FLAVOR $ECLIPSE_FLAVOR
+ENV HOME=/home/${CONTAINER_USER}
+ENV GRADLE_FLAVOR=$GRADLE_FLAVOR
+ENV TOMCAT_FLAVOR=$TOMCAT_FLAVOR
+ENV MYSQL_FLAVOR=$MYSQL_FLAVOR
+ENV CONTAINER_USER=$CONTAINER_USER
+ENV CONTAINER_DIR_NAME=$CONTAINER_DIR_NAME
+ENV ECLIPSE_FLAVOR=$ECLIPSE_FLAVOR
 
 # Define working directory.
 WORKDIR /home/${CONTAINER_USER}

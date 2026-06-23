@@ -1,10 +1,12 @@
-# Headless Ubuntu VNC Container with xfce window manager, OpenJDK 8, Eclipse, Tomcat, MySQL, MySQL Workbench, Firefox
-FROM ackdev/secure_proxy_securitas-wall-base-xfce:2019-09-22-r1
+# Headless Ubuntu 24.04 VNC Container with xfce window manager, OpenJDK 21, Eclipse, Tomcat 10.1, MySQL 8.4, Firefox
+FROM ackdev/secure_proxy_securitas-wall-base-xfce:2026-06-23-r1
 
-LABEL maintainer="Acknowledged Development Inc. help@ackdev.com"
-MAINTAINER Acknowledged Development Inc. "help@ackdev.com"
+LABEL maintainer="Securitas Machina (Acknowledged Development Inc.) help@ackdev.com"
 
-LABEL io.k8s.description="Headless VNC Container with xfce window manager, OpenJDK 8, Eclipse, Tomcat, MySQL, MySQL Workbench, Firefox" \
+LABEL org.opencontainers.image.title="SecuritasWall Headless Developer VNC Container" \
+      org.opencontainers.image.source="https://github.com/SecuritasMachina/docker-headless-securitaswall" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      io.k8s.description="Headless VNC Container with xfce window manager, OpenJDK 21, Eclipse, Tomcat 10.1, MySQL 8.4, Firefox" \
       io.k8s.display-name="Headless Enterprise Developer VNC Container based on xfce" \
       io.openshift.expose-services="6901:http,5901:xvnc" \
       io.openshift.tags="vnc, xfce" \

@@ -1,20 +1,24 @@
 # How to release
 
-* Check if `changelog.md` is correct
-* Check if all features are merged in dev and pushed
-* Pull the latest `dev` images
-    
-      .build/tag_image.sh dev 1.x.x --save
-    
-* Test if the latest `dev` build is usable
-  * Change the the `FROM` statement in Sakuli `Dockerfile` to `dev` tag (in separate branch) and run (after build on dockerhub) [`docker/.build/tag_image.sh --save`](https://github.com/ConSol/sakuli/blob/master/docker/.build/tag_image.sh)  
+1. **Update the version pins** in `Dockerfile.base.1` (the `ARG *_FLAVOR` lines) and the
+   download versions in `src/common/install/no_vnc.sh`. Update the matching badges/table in
+   `README.md`.
+2. **Bump the image tag.** The four images share one release tag (currently `2026-06-23-r1`).
+   Update it consistently in `Dockerfile`, `Dockerfile.base.2.devTools`, `Dockerfile.base.3.xfce`
+   and the `build-base.*.sh` / `build.sh` scripts.
+3. **Update `changelog.md`** with the notable changes.
+4. **Build every stage** on a clean, throwaway VM:
 
-* On success - push the tested `dev` images to dockerhub
-    
-      .build/tag_image.sh dev 1.x.x
-      .build/tag_image.sh dev latest
-      
-* Merge `dev` branch to `master`
+   ```bash
+   ./buildAll.sh
+   ```
 
-* Create a release on [github.com/ConSol/docker-headless-vnc-container/releases/new](https://github.com/ConSol/docker-headless-vnc-container/releases/new)
-* Write a blog post for [labs.consol.de](https://labs.consol.de/)
+   `build.sh` virus-scans the final image with ClamAV and runs the `goss.yaml` smoke tests
+   (`dgoss`). Do not push if a virus is found or a test fails.
+5. **Push the four tagged images** (the exact `docker push` commands are printed at the end of a
+   successful `build.sh` run).
+6. **Tag the release** on GitHub:
+   <https://github.com/SecuritasMachina/docker-headless-securitaswall/releases/new>
+
+> Major/minor `.x` releases are built and pushed from a Compute VM that is spun up only for the
+> build and shut down afterwards, to minimise exposure.
