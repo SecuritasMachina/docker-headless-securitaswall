@@ -3,4 +3,11 @@ set -e
 
 echo "Install TigerVNC server"
 source $INST_SCRIPTS/commonFunctions.sh
-retry wget -qO- https://dl.bintray.com/tigervnc/stable/tigervnc-1.8.0.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C /
+
+# The old Bintray tarball (dl.bintray.com/tigervnc/stable/...) was permanently shut down in 2021.
+# On Ubuntu 24.04 LTS the maintained TigerVNC packages ship in the universe repository.
+retry apt-get update
+retry apt-get install -y --no-install-recommends \
+    tigervnc-standalone-server \
+    tigervnc-common \
+    tigervnc-tools

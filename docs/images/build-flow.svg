@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="stage" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f2d3d"/>
+      <stop offset="1" stop-color="#152232"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#4fb0c6"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="300" fill="#0d1622"/>
+  <text x="32" y="44" fill="#e8eef5" font-size="22" font-weight="700">SecuritasWall — multi-stage build pipeline</text>
+  <text x="32" y="68" fill="#8aa0b6" font-size="13">Each stage is a tagged image; the next stage builds FROM the previous one.</text>
+
+  <!-- stages -->
+  <g>
+    <!-- stage 1 -->
+    <rect x="24"  y="104" width="200" height="128" rx="10" fill="url(#stage)" stroke="#2f4763"/>
+    <rect x="24"  y="104" width="200" height="30" rx="10" fill="#22364d"/>
+    <text x="124" y="124" fill="#e8eef5" font-size="13" font-weight="700" text-anchor="middle">Dockerfile.base.1</text>
+    <text x="124" y="158" fill="#4fb0c6" font-size="12" text-anchor="middle" font-weight="600">Ubuntu 24.04 LTS</text>
+    <text x="124" y="180" fill="#c4d2e0" font-size="11" text-anchor="middle">OpenJDK 21 · ClamAV</text>
+    <text x="124" y="198" fill="#c4d2e0" font-size="11" text-anchor="middle">Squid + c-icap proxy</text>
+    <text x="124" y="216" fill="#c4d2e0" font-size="11" text-anchor="middle">hardening, locale, user</text>
+
+    <!-- stage 2 -->
+    <rect x="264" y="104" width="200" height="128" rx="10" fill="url(#stage)" stroke="#2f4763"/>
+    <rect x="264" y="104" width="200" height="30" rx="10" fill="#22364d"/>
+    <text x="364" y="124" fill="#e8eef5" font-size="13" font-weight="700" text-anchor="middle">Dockerfile.base.2</text>
+    <text x="364" y="158" fill="#4fb0c6" font-size="12" text-anchor="middle" font-weight="600">Developer tools</text>
+    <text x="364" y="180" fill="#c4d2e0" font-size="11" text-anchor="middle">Tomcat 10.1 · MySQL 8.4</text>
+    <text x="364" y="198" fill="#c4d2e0" font-size="11" text-anchor="middle">Eclipse 2024-09 · Gradle 8</text>
+    <text x="364" y="216" fill="#c4d2e0" font-size="11" text-anchor="middle">home dir + dotfiles</text>
+
+    <!-- stage 3 -->
+    <rect x="504" y="104" width="200" height="128" rx="10" fill="url(#stage)" stroke="#2f4763"/>
+    <rect x="504" y="104" width="200" height="30" rx="10" fill="#22364d"/>
+    <text x="604" y="124" fill="#e8eef5" font-size="13" font-weight="700" text-anchor="middle">Dockerfile.base.3</text>
+    <text x="604" y="158" fill="#4fb0c6" font-size="12" text-anchor="middle" font-weight="600">xfce + VNC</text>
+    <text x="604" y="180" fill="#c4d2e0" font-size="11" text-anchor="middle">TigerVNC · noVNC 1.5</text>
+    <text x="604" y="198" fill="#c4d2e0" font-size="11" text-anchor="middle">Firefox · Chromium</text>
+    <text x="604" y="216" fill="#c4d2e0" font-size="11" text-anchor="middle">custom fonts</text>
+
+    <!-- final -->
+    <rect x="744" y="104" width="192" height="128" rx="10" fill="#13302b" stroke="#2f7d5b"/>
+    <rect x="744" y="104" width="192" height="30" rx="10" fill="#1c4a3d"/>
+    <text x="840" y="124" fill="#e8eef5" font-size="13" font-weight="700" text-anchor="middle">Dockerfile (final)</text>
+    <text x="840" y="158" fill="#5fd0a0" font-size="12" text-anchor="middle" font-weight="600">SecuritasWall</text>
+    <text x="840" y="180" fill="#c4d2e0" font-size="11" text-anchor="middle">security tools applied</text>
+    <text x="840" y="198" fill="#c4d2e0" font-size="11" text-anchor="middle">storage + permissions</text>
+    <text x="840" y="216" fill="#c4d2e0" font-size="11" text-anchor="middle">entrypoint, ready to run</text>
+  </g>
+
+  <!-- arrows -->
+  <line x1="226" y1="168" x2="262" y2="168" stroke="#4fb0c6" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="466" y1="168" x2="502" y2="168" stroke="#4fb0c6" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="706" y1="168" x2="742" y2="168" stroke="#4fb0c6" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <text x="32" y="276" fill="#8aa0b6" font-size="12">buildAll.sh → build-base.1.sh → build-base.2.sh → build-base.3.sh → build.sh (virus-scanned, then goss-tested)</text>
+</svg>

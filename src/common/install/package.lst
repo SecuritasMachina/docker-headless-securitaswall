@@ -5,7 +5,7 @@ libcurl4-gnutls-dev
 c-icap
 libicapapi-dev
 ##JDK
-openjdk-8-jre-headless
+openjdk-21-jre-headless
 #Security related
 clamav
 clamav-daemon
@@ -29,8 +29,8 @@ bzip2
 locate
 libnss-wrapper 
 gettext
-##Mysql
-libaio1 
+##Mysql (libaio1 was renamed libaio1t64 in Ubuntu 24.04 due to the 64-bit time_t transition)
+libaio1t64
 libaio-dev
 numactl
 #mysql-workbench
@@ -43,7 +43,7 @@ telnet
 curl
 net-tools
 #used for websockify/novnc
-python-numpy
+python3-numpy
 ##Source control
 #mercurial
 #subversion
@@ -53,6 +53,9 @@ git
 #epiphany-browser
 #firefox
 #Chrome
+# NOTE: On Ubuntu 24.04 the apt `chromium-browser` package is a transitional stub that
+# pulls the snap, which does not run headless inside a container. To keep a working .deb
+# Chromium, install from the LaunchPad PPA (ppa:xtradeb/apps -> `chromium`) or pin a .deb.
 chromium-browser
 chromium-browser-l10n
 chromium-codecs-ffmpeg

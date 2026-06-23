@@ -1,7 +1,6 @@
-# Install Development TOols
-FROM ackdev/secure_proxy_securitas-wall-base-1:2019-09-22-r1
-LABEL maintainer="Acknowledged Development Inc. help@ackdev.com"
-MAINTAINER Acknowledged Development Inc. "help@ackdev.com"
+# Install Development Tools
+FROM ackdev/secure_proxy_securitas-wall-base-1:2026-06-23-r1
+LABEL maintainer="Securitas Machina (Acknowledged Development Inc.) help@ackdev.com"
 
 
 ADD src/template/homeDir $HOME/

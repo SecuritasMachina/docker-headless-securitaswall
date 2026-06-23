@@ -15,10 +15,11 @@ file:
     group: superstar
     filetype: file
     contains: []
-  /home/superstar/.dockerDevTools/archives/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz:
+  # Optional developer-tool archives (only present when downloaded into the build context).
+  # Exact byte sizes are intentionally omitted so a tool-version bump doesn't break the test.
+  /home/superstar/.dockerDevTools/archives/eclipse-jee-2024-09-R-linux-gtk-x86_64.tar.gz:
     exists: true
     mode: "0660"
-    size: 351457868
     owner: superstar
     group: superstar
     filetype: file
@@ -26,23 +27,20 @@ file:
   /home/superstar/bin/eclipse.sh:
     exists: true
     mode: "0770"
-    size: 125
     owner: superstar
     group: superstar
     filetype: file
     contains: []
-  /home/superstar/.dockerDevTools/archives/apache-tomcat-8.5.40.tar.gz:
+  /home/superstar/.dockerDevTools/archives/apache-tomcat-10.1.34.tar.gz:
     exists: true
     mode: "0660"
-    size: 9690027
     owner: superstar
     group: superstar
     filetype: file
     contains: []
-  /home/superstar/.dockerDevTools/archives/mysql-8.0.15-linux-glibc2.12-x86_64.tar.xz:
+  /home/superstar/.dockerDevTools/archives/mysql-8.4.4-linux-glibc2.28-x86_64.tar.xz:
     exists: true
     mode: "0660"
-    size: 376303592
     owner: superstar
     group: superstar
     filetype: file
