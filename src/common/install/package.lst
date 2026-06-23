@@ -17,6 +17,8 @@ clamtk
 sudo
 ##Common
 #dirmngr
+#gnupg provides `gpg` (needed to dearmor the SecuritasMachina apt key into /etc/apt/keyrings)
+gnupg
 vim
 unzip
 nano

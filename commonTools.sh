@@ -6,11 +6,14 @@ echo "Install common tools for further installation"
 
 apt-get install -y $(awk -F: '/^[^#]/ { print $1 }' $INST_SCRIPTS/package.lst) 
 
-retry curl -fsSL https://www.securitasmachina.com/SecuritasMachina.gpg.key | apt-key add -
-add-apt-repository \
-   "deb [arch=amd64] https://updates.securitasmachina.com/repos/apt/ubuntu  \
-   $(lsb_release -cs) \
-   stable"
+# Register the SecuritasMachina APT repo using the modern keyring layout
+# (`apt-key` was removed in Ubuntu 23.04+; use `signed-by=` instead).
+install -d -m 0755 /etc/apt/keyrings
+retry curl -fsSL https://www.securitasmachina.com/SecuritasMachina.gpg.key \
+    | gpg --dearmor -o /etc/apt/keyrings/securitasmachina.gpg
+chmod 0644 /etc/apt/keyrings/securitasmachina.gpg
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/securitasmachina.gpg] https://updates.securitasmachina.com/repos/apt/ubuntu $(lsb_release -cs) stable" \
+    > /etc/apt/sources.list.d/securitasmachina.list
 
 retry apt-get update
 
